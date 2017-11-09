@@ -30,8 +30,7 @@ stage('Functional tests') {
               archiveArtifacts 'screenshot1.png'
 
               }
-          }
-          },
+                   },
 
           "KGS": {
             node(label: 'docker-1.13') {
@@ -50,8 +49,6 @@ stage('Functional tests') {
                }
               junit 'ftestsreport.xml'
               archiveArtifacts 'screenshot1.png'
-
-              }
             }
           },
 
@@ -79,6 +76,6 @@ stage('Functional tests') {
           )
       }
 }
-    
-  }
+  }  
+  
 }
