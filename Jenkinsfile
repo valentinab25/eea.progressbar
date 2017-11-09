@@ -16,7 +16,7 @@ stage('Functional tests') {
                 script {
                 try {
                   checkout scm
-                  sh '''docker run -p 8080 -d --name=$BUILD_TAG-ft-www  -e GIT_BRANCH="$BRANCH_NAME" -e GIT_CHANGE_ID="$CHANGE_ID" -e ADDONS="$GIT_NAME" -e DEVELOP="src/$GIT_NAME" eeacms/www-devel:4'''
+                  sh '''docker run -p 8080 -d --name=$BUILD_TAG-ft-www  -e GIT_BRANCH="$BRANCH_NAME" -e GIT_CHANGE_ID="$CHANGE_ID" -e ADDONS="$GIT_NAME" -e DEVELOP="src/$GIT_NAME" eeacms/www-devel'''
                   sh '''docker port $BUILD_TAG-ft-www 8080/tcp > url.file;docker_ip=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.Gateway}}{{end}}' $BUILD_TAG-ft-plone4); sed -i -e "s/0.0.0.0/${docker_ip}/g" url.file'''
                   sh '''new_url=$(cat url.file);timeout 600  wget --retry-connrefused --tries=60 --waitretry=10 -q http://${new_url}/'''
                   sh '''new_url=$(cat url.file);casperjs test eea/progressbar/ftests/plone4/*.js --url=${new_url} --xunit=ftestsreport.xml'''
