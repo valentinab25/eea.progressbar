@@ -27,6 +27,7 @@ stage('Functional tests') {
                 }
                }
               junit 'ftestsreport.xml'
+              archiveArtifacts 'screenshot1.png'
 
               }
                    },
