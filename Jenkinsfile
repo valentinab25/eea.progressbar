@@ -27,7 +27,7 @@ stage('Functional tests') {
                 }
                }
               junit 'ftestsreport.xml'
-              archiveArtifacts 'screenshot1.png'
+              archiveArtifacts 'screenshot_eea.png'
 
               }
                    },
@@ -48,6 +48,7 @@ stage('Functional tests') {
                 }
                }
               junit 'ftestsreport.xml'
+               archiveArtifacts 'screenshot_kgs.png'
             }
           },
 
@@ -67,7 +68,7 @@ stage('Functional tests') {
                 }
                }
               junit 'ftestsreport.xml'
-              archiveArtifacts 'screenshot1.png'
+              archiveArtifacts 'screenshot_plone4.png'
 
               }
 
