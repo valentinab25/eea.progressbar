@@ -22,7 +22,7 @@ pipeline {
         parallel(
 
           "Check files": {
-            node() {
+            node(label: 'docker-1.13') {
                     withCredentials([string(credentialsId: 'GitHubTokentest', variable: 'GITHUB_TOKEN')]) {
                       script{
                         def apiUrl = "https://api.github.com/repos/${env.GIT_ORG}/${env.GIT_NAME}/pulls/${env.CHANGE_ID}/files"
@@ -46,7 +46,25 @@ pipeline {
 		         }
 		         if (check_version_changed == "false" ) {                       
 		             error "Pipeline aborted due to no version changed"
-                          }	      
+                          }
+                              checkout scm 
+			      version = readFile 'eea/progressbar/version.txt'
+			      echo "${version}"
+			      
+                        
+                      }
+                      }         
+           
+            }
+          },
+		   "Check versions": {
+            node(label: 'docker-1.13') {
+                    withCredentials([string(credentialsId: 'GitHubTokentest', variable: 'GITHUB_TOKEN')]) {
+                      script{
+                                   checkout scm 
+			      version = readFile 'eea/progressbar/version.txt'
+			      echo "${version}"
+			      
                         
                       }
                       }         
