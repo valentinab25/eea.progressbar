@@ -1,41 +1,58 @@
+#!groovy
+
+import groovy.json.JsonOutput
+import groovy.json.JsonSlurper
+
 pipeline {
   agent any
 
   environment {
         GIT_NAME = "eea.progressbar"
+        GIT_ORG = "eea"
     }
 
   stages {
    
-  stage('Functional tests') {
+    stage('Pull request checks') {
            when {
                 not {
                     environment name: 'CHANGE_ID', value: ''
                 }
             }
      steps {
-        parallel(
-
-          "KGS": {
-            node(label: 'docker-1.13') {
-                  script {
-                try {
-                  checkout scm
-                  sh '''docker run -p 8080 -d --name=$BUILD_TAG-ft-kgs  -e GIT_BRANCH="$BRANCH_NAME" -e GIT_CHANGE_ID="$CHANGE_ID" -e ADDONS="$GIT_NAME" -e DEVELOP="src/$GIT_NAME" eeacms/kgs-devel'''
-                  sh '''docker port $BUILD_TAG-ft-kgs 8080/tcp > url.file;docker_ip=$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.Gateway}}{{end}}' $BUILD_TAG-ft-kgs); sed -i -e "s/0.0.0.0/${docker_ip}/g" url.file'''
-                  sh '''new_url=$(cat url.file);timeout 600  wget --retry-connrefused --tries=60 --waitretry=10 -q http://${new_url}/'''
-                  sh '''new_url=$(cat url.file);casperjs test eea/progressbar/ftests/kgs/*.js --url=${new_url} --xunit=ftestsreport.xml'''
-                }
-                finally {
-                  sh '''docker stop $BUILD_TAG-ft-kgs'''
-                  sh '''docker rm -v $BUILD_TAG-ft-kgs'''
-                }
-               }
-              junit 'ftestsreport.xml'
-               archiveArtifacts 'screenshot_kgs.png'
+       
+          "Check files": {
+            node {
+                    withCredentials([[$class: 'StringBinding', credentialsId: 'gitvalentinab2', variable: 'GITHUB_TOKEN']]) {
+                    curl -s -H "Authorization: bearer $BEARER_TOKEN" 
+                    def apiUrl = "https://api.github.com/repos/${env.GIT_ORG}/${env.GIT_NAME}/pulls/${env.CHANGE_ID}/files"
+                    def response = sh(returnStdout: true, script: "curl -s -H \"Authorization: Token ${env.GITHUB_TOKEN}\" ${apiUrl}").trim()
+                    def jsonSlurper = new JsonSlurper()
+                    def files_changed = jsonSlurper.parseText(response)
+                    def check_version_changed = false
+                    def check_history_changed = false
+                    files_changed.each {
+                          if ($it.filename == "eea/progressbar/version.txt" and $it.status == "modified")  {
+                                check_version_changed = true
+                          }
+                          if ($it.filename == "docs/HISTORY.txt" and $it.status == "modified")  {
+                                check_history_changed = true
+                          }
+                     }
+                      if (! check_history_changed) {                       
+                          error "Pipeline aborted due to no history file changed"
+                      }
+                      if (! check_history_changed) {                       
+                          error "Pipeline aborted due to no version changed"
+                      }
+                      
+      
+                      }                 
+                  }
+             
             }
           }
-          )
+        
       }
 }
   }  
