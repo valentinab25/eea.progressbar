@@ -1,7 +1,3 @@
-#!groovy
-
-import groovy.json.JsonOutput
-import groovy.json.JsonSlurper
 
 pipeline {
   agent any
