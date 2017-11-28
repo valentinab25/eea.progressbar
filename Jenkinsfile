@@ -22,7 +22,7 @@ pipeline {
         parallel(
 
           "Check files": {
-            node(label: 'docker-1.13') {
+            node() {
                     withCredentials([string(credentialsId: 'GitHubTokentest', variable: 'GITHUB_TOKEN')]) {
                       script{
                         def apiUrl = "https://api.github.com/repos/${env.GIT_ORG}/${env.GIT_NAME}/pulls/${env.CHANGE_ID}/files"
@@ -46,11 +46,28 @@ pipeline {
 		         }
 		         if (check_version_changed == "false" ) {                       
 		             error "Pipeline aborted due to no version changed"
-                          }
-                         version = readFile 'eea/progressbar/version.txt'
-			      echo "${version}"
-			      
+                          }	      
                         
+                      }
+                      }         
+           
+            }
+          },
+	 "Check new version": {
+            node() {
+                    checkout scm 
+		    withCredentials([string(credentialsId: 'GitHubTokentest', variable: 'GITHUB_TOKEN')]) {
+                      script{
+                        def apiUrl = "https://api.github.com/repos/${env.GIT_ORG}/${env.GIT_NAME}/tags"
+                        def response = sh(returnStdout: true, script: "curl -s -H \"Authorization: Token ${env.GITHUB_TOKEN}\" ${apiUrl}").trim()
+                        def jsonSlurper = new JsonSlurper()
+                        def tags = jsonSlurper.parseText(response)
+                        def check_version = "false"
+                        def check_biggest 
+                        tags.each {
+                            
+                         }
+                                                
                       }
                       }         
            
