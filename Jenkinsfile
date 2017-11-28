@@ -23,9 +23,9 @@ pipeline {
 
           "Check files": {
             node(label: 'docker-1.13') {
-                    withCredentials([string(credentialsId: 'gitvalentinab2', variable: 'GITHUB_TOKEN')]) {
-                    def apiUrl = "https://api.github.com/repos/${env.GIT_ORG}/${env.GIT_NAME}/pulls/${env.CHANGE_ID}/files"
-                   
+                    withCredentials([string(credentialsId: 'GitHubTokentest', variable: 'GITHUB_TOKEN')]) {
+                      def apiUrl = "https://api.github.com/repos/${env.GIT_ORG}/${env.GIT_NAME}/pulls/${env.CHANGE_ID}/files"
+                 
       
                       }         
            
