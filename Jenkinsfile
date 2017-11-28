@@ -1,4 +1,3 @@
-
 pipeline {
   agent any
 
@@ -9,22 +8,27 @@ pipeline {
 
   stages {
    
-    stage('Pull request checks') {
+  stage('Pull request checks') {
            when {
                 not {
                     environment name: 'CHANGE_ID', value: ''
                 }
             }
      steps {
-       
+        parallel(
+
           "Check files": {
-            node {
-                  }
-             
+            node(label: 'docker-1.13') {
+                  script {
+              
+               }
+           
             }
           }
-        
+          )
       }
-    }  
+}
+  }  
   
 }
+
