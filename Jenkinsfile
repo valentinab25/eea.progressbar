@@ -41,14 +41,15 @@ pipeline {
                               }
                          }
                         
-                        
-		                            if (check_history_changed == "false") {                       
-		                                error "Pipeline aborted due to no history file changed"
-		                            }
-		                            if (check_version_changed == "false" ) {                       
-		                                error "Pipeline aborted due to no version changed"
+                        if (check_history_changed == "false") {                       
+		             error "Pipeline aborted due to no history file changed"
+		         }
+		         if (check_version_changed == "false" ) {                       
+		             error "Pipeline aborted due to no version changed"
                           }
-                      
+                         version = readFile 'eea/progressbar/version.txt'
+			      echo "${version}"
+			      
                         
                       }
                       }         
