@@ -7,7 +7,7 @@ pipeline {
 
   environment {
         GIT_NAME = "eea.progressbar"
-        GIT_ORG = "eea"
+        GIT_ORG = "valentinab25"
     }
 
   stages {
