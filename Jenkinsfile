@@ -32,7 +32,12 @@ pipeline {
                         def check_version_changed = "false"
                         def check_history_changed = "false"
                         files_changed.each {
-                             
+                              if ($it.filename == "eea/progressbar/version.txt" && $it.status == "modified")  {
+                                    check_version_changed = "true"
+                              }
+                              if ($it.filename == "docs/HISTORY.txt" && $it.status == "modified")  {
+                                    check_history_changed = "true"
+                              }
                          }
                       
                         
