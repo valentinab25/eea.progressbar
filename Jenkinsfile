@@ -20,7 +20,6 @@ pipeline {
           "Check files": {
             node(label: 'docker-1.13') {
                   withCredentials([[$class: 'StringBinding', credentialsId: 'gitvalentinab2', variable: 'GITHUB_TOKEN']]) {
-                    curl -s -H "Authorization: bearer $BEARER_TOKEN" 
                     def apiUrl = "https://api.github.com/repos/${env.GIT_ORG}/${env.GIT_NAME}/pulls/${env.CHANGE_ID}/files"
                     def response = sh(returnStdout: true, script: "curl -s -H \"Authorization: Token ${env.GITHUB_TOKEN}\" ${apiUrl}").trim()
                     def jsonSlurper = new JsonSlurper()
