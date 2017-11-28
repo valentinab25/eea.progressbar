@@ -9,9 +9,8 @@ pipeline {
    
   stage('Functional tests') {
            when {
-                allOf {
+                not {
                     environment name: 'CHANGE_ID', value: ''
-                    branch 'master'
                 }
             }
      steps {
