@@ -52,26 +52,6 @@ pipeline {
                       }         
            
             }
-          },
-	 "Check new version": {
-            node() {
-                    checkout scm 
-		    withCredentials([string(credentialsId: 'GitHubTokentest', variable: 'GITHUB_TOKEN')]) {
-                      script{
-                        def apiUrl = "https://api.github.com/repos/${env.GIT_ORG}/${env.GIT_NAME}/tags"
-                        def response = sh(returnStdout: true, script: "curl -s -H \"Authorization: Token ${env.GITHUB_TOKEN}\" ${apiUrl}").trim()
-                        def jsonSlurper = new JsonSlurper()
-                        def tags = jsonSlurper.parseText(response)
-                        def check_version = "false"
-                        def check_biggest 
-                        tags.each {
-                            
-                         }
-                                                
-                      }
-                      }         
-           
-            }
           }
           )
       }
