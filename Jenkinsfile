@@ -6,9 +6,15 @@ pipeline {
     }
 
   stages {
-        
-stage('Functional tests') {
-      steps {
+   
+  stage('Functional tests') {
+           when {
+                allOf {
+                    environment name: 'CHANGE_ID', value: ''
+                    branch 'master'
+                }
+            }
+     steps {
         parallel(
 
           "KGS": {
