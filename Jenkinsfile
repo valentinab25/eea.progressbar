@@ -65,7 +65,7 @@ pipeline {
 				def jsonSlurper = new JsonSlurper()
 				def tags = jsonSlurper.parseText(response)
 				def check_version_is_new = "true"
-				def last_version = files_changed[0]["name"]
+				def last_version = tags[0]["name"]
 			      echo "Version is ${version}, last version is ${last_version}"
 			      tags.each {
                                  
