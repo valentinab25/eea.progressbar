@@ -60,7 +60,24 @@ pipeline {
                                    checkout scm 
 			      version = readFile 'eea/progressbar/version.txt'
 			      echo "Version is ${version}"
-			      
+			  def apiUrl = "https://api.github.com/repos/${env.GIT_ORG}/${env.GIT_NAME}/tags"
+                        def response = sh(returnStdout: true, script: "curl -s -H \"Authorization: Token ${env.GITHUB_TOKEN}\" ${apiUrl}").trim()
+                        def jsonSlurper = new JsonSlurper()
+                        def tags = jsonSlurper.parseText(response)
+                        def check_version_is_new = "true"
+                        def last_version = files_changed[0]["name"]
+                        
+			      files_changed.each {
+                                 
+                              if (it["name"] == version)  {
+                                    check_version_is_new = "false"
+                              }
+                              }
+                        
+                        if (check_version_is_new == "false") {                       
+		             error "Pipeline aborted due to no version already present"
+		         }
+		        
                         
                       }
                       }         
