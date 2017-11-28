@@ -69,7 +69,7 @@ pipeline {
 			      echo "Version is ${version}, last version is ${last_version}"
 			      tags.each {
                                  
-                              if (it["name"] == version)  {
+				      if (it["name"] == "${version}")  {
                                     check_version_is_new = "false"
                               }
                               }
@@ -78,7 +78,15 @@ pipeline {
 		             error "Pipeline aborted due to no version already present"
 		         }
 		        
-                        
+			      String mostRecentVersion( List versions ) {
+ 			      versions.sort( false ) { a, b ->
+				    [a,b]*.tokenize('.')*.collect { it as int }.with { u, v ->
+				      [u,v].transpose().findResult{ x,y-> x<=>y ?: null } ?: u.size() <=> v.size()
+				    }
+				  }[-1]
+                                }                 
+                          def lastversion=mostRecentVersion([ "${version}","${last_version}"])
+			      echo "${lastversion}"
                       }
                       }         
            
