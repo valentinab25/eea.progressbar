@@ -31,9 +31,8 @@ pipeline {
                         def files_changed = jsonSlurper.parseText(response)
                         def check_version_changed = "false"
                         def check_history_changed = "false"
-                        echo "${response}"
                         files_changed.each {
-                                 echo "${it}"
+                                 
                               if (it["filename"] == "eea/progressbar/version.txt" && it["status"] == "modified")  {
                                     check_version_changed = "true"
                               }
@@ -41,6 +40,14 @@ pipeline {
                                     check_history_changed = "true"
                               }
                          }
+                        
+                        
+		                            if (check_history_changed == "false") {                       
+		                                error "Pipeline aborted due to no history file changed"
+		                            }
+		                            if (check_version_changed == "false" ) {                       
+		                                error "Pipeline aborted due to no version changed"
+                          }
                       
                         
                       }
