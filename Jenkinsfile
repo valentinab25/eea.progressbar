@@ -27,7 +27,9 @@ pipeline {
                       script{
                         def apiUrl = "https://api.github.com/repos/${env.GIT_ORG}/${env.GIT_NAME}/pulls/${env.CHANGE_ID}/files"
                         def response = sh(returnStdout: true, script: "curl -s -H \"Authorization: Token ${env.GITHUB_TOKEN}\" ${apiUrl}").trim()
-                       
+                        def jsonSlurper = new JsonSlurper()
+                        def files_changed = jsonSlurper.parseText(response)
+                        
                       
                         
                       }
