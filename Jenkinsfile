@@ -47,11 +47,7 @@ pipeline {
 		         if (check_version_changed == "false" ) {                       
 		             error "Pipeline aborted due to no version changed"
                           }
-                              checkout scm 
-			      version = readFile 'eea/progressbar/version.txt'
-			      echo "${version}"
-			      
-                        
+                                                   
                       }
                       }         
            
@@ -63,7 +59,7 @@ pipeline {
                       script{
                                    checkout scm 
 			      version = readFile 'eea/progressbar/version.txt'
-			      echo "${version}"
+			      echo "Version is ${version}"
 			      
                         
                       }
