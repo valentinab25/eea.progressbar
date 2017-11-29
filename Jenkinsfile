@@ -14,7 +14,7 @@ pipeline {
 
   stages {
 	  
-  stage('Master branch release and tag') {
+    stage('Master branch release and tag') {
            when {
                 allOf {
                     environment name: 'CHANGE_ID', value: ''
@@ -45,7 +45,7 @@ pipeline {
           }
           )
       }
-}, 
+  }, 
 		    
 		    
   stage('Pull request checks') {
