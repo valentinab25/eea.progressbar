@@ -78,10 +78,9 @@ pipeline {
 				     error "Pipeline aborted due to version already present in tags"
 				 }
 			      
-		                def versions =[ "${last_version}", "${version}"]
 			 	def result = -100
-                                List verA = version.tokenize('.')
-				List verB = last_version.tokenize('.')
+                                List verB = version.tokenize('.')
+				List verA = last_version.tokenize('.')
                                 def commonIndices = verA.size()
 			        if (verB.size() < commonIndices) {
 				      commonIndices = verB.size()
