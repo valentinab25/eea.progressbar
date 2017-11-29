@@ -79,8 +79,8 @@ pipeline {
 				 }
 			      
 			 	def result = -100
-                                List verB = version.tokenize('.')
-				List verA = last_version.tokenize('.')
+                                List verA = version.tokenize('.')
+				List verB = last_version.tokenize('.')
                                 def commonIndices = verA.size()
 			        if (verB.size() < commonIndices) {
 				      commonIndices = verB.size()
@@ -103,7 +103,9 @@ pipeline {
 			      }
  
 
-			    echo "sorted versions: ${result}"					    
+			    if ( result == -1 )	{                       
+				     error "Pipeline aborted due to version ${version} being smaller than last version ${last_version}"
+				 }				    
                         
                       }
                       }         
