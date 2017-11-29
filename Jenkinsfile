@@ -74,10 +74,16 @@ pipeline {
                                         }
                               }
                         
-                        if (check_version_is_new == "false") {                       
-		             error "Pipeline aborted due to no version already present"
-		         }
-		        
+				if (check_version_is_new == "false") {                       
+				     error "Pipeline aborted due to version already present in tags"
+				 }
+		         def String mostRecentVersion( List versions ) {
+				  versions.sort( false ) { a, b ->
+				    [a,b]*.tokenize('.')*.collect { it as int }.with { u, v ->
+				      [u,v].transpose().findResult{ x,y-> x<=>y ?: null } ?: u.size() <=> v.size()
+				    }
+				  }[-1]
+				}
                         
                       }
                       }         
