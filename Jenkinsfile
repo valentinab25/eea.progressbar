@@ -78,7 +78,7 @@ pipeline {
 				     error "Pipeline aborted due to version already present in tags"
 				 }
 			      
-		                def versions =[ "${version}", "${last_version}"]
+		                def versions =[ "${last_version}", "${version}"]
 			 	def result = -100
                                 List verA = version.tokenize('.')
 				List verB = last_version.tokenize('.')
