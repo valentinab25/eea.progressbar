@@ -110,7 +110,7 @@ pipeline {
       }
 },
 	  
-  stage('Master branch release and tag') {
+	   stage('Master branch release and tag') {
       when {
                 allOf {
                     environment name: 'CHANGE_ID', value: ''
@@ -118,22 +118,22 @@ pipeline {
                 }
             }
      steps {
-
+ parallel(
           "Release": {
             node(label: 'docker-1.13') {
-         
-           
             }
           },
 		
           "Tag": {
-            node(label: 'docker-1.13') {
-         
-           
+            node(label: 'docker-1.13') {       
             }
-          }		
+          }	
+          )
       }
-}
+} 
+	  
+	  
+	  
 	  
   }  
   
