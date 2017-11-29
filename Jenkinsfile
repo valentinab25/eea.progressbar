@@ -82,7 +82,10 @@ pipeline {
 			 	def result = -100
                                 List verA = version.tokenize('.')
 				List verB = last_version.tokenize('.')
-                                def commonIndices = Math.min(verA.size(), verB.size())
+                                def commonIndices = verA.size()
+			        if (verB.size() < commonIndices) {
+				      commonIndices = verB.size()
+			         }
 
 				    for (int i = 0; i < commonIndices; ++i) {
 				      def numA = verA[i].toInteger()
