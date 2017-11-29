@@ -79,12 +79,7 @@ pipeline {
 				 }
 			      
 		              def versions =[ "${version}", "${last_version}"]
-			      def biggest_version= versions.sort( false ) { a, b ->
-                            [a,b]*.tokenize('.')*.collect { it as int }.with { u, v ->
-                           [u,v].transpose().findResult{ x,y-> x<=>y ?: null } ?: u.size() <=> v.size()
-                                           }
-                                 }[-1]  
-						    
+			 						    
                         
                       }
                       }         
