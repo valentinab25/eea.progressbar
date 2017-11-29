@@ -1,5 +1,5 @@
 #!groovy
-import groovy.json.JsonOutput
+
 import groovy.json.JsonSlurper
 
 pipeline {
@@ -8,6 +8,8 @@ pipeline {
   environment {
         GIT_NAME = "eea.progressbar"
         GIT_ORG = "valentinab25"
+        GIT_VERSIONFILE = "eea/progressbar/version.txt"
+        GIT_HISTORYFILE = "docs/HISTORY.txt"
     }
 
   stages {
@@ -33,10 +35,10 @@ pipeline {
                         def check_history_changed = "false"
                         files_changed.each {
                                  
-                              if (it["filename"] == "eea/progressbar/version.txt" && it["status"] == "modified")  {
+				if (it["filename"] == "${GIT_VERSIONFILE}" && it["status"] == "modified")  {
                                     check_version_changed = "true"
                               }
-                              if (it["filename"] == "docs/HISTORY.txt" && it["status"] == "modified")  {
+				if (it["filename"] == "${GIT_HISTORYFILE}" && it["status"] == "modified")  {
                                     check_history_changed = "true"
                               }
                          }
@@ -58,7 +60,7 @@ pipeline {
                     withCredentials([string(credentialsId: 'GitHubTokentest', variable: 'GITHUB_TOKEN')]) {
                       script{
                                    checkout scm 
-			      def version_temp = readFile 'eea/progressbar/version.txt'
+			      def version_temp = readFile GIT_VERSIONFILE
 			      def version = version_temp.trim()
 			      
 			      def apiUrl = "https://api.github.com/repos/${env.GIT_ORG}/${env.GIT_NAME}/tags"
