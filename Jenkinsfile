@@ -80,28 +80,25 @@ pipeline {
 			      
 		                def versions =[ "${version}", "${last_version}"]
 			 	def result = -100
-                                 
-				    List verA = version.tokenize('.')
-				    List verB = last_version.tokenize('.')
-
-				    def commonIndices = Math.min(verA.size(), verB.size())
+                                List verA = version.tokenize('.')
+				List verB = last_version.tokenize('.')
+                                def commonIndices = Math.min(verA.size(), verB.size())
 
 				    for (int i = 0; i < commonIndices; ++i) {
 				      def numA = verA[i].toInteger()
 				      def numB = verB[i].toInteger()
-					    echo "comparing ${numA} and ${numB}"
+				      echo "comparing ${numA} and ${numB}"
 
 				      if (numA != numB) {
 					result = numA <=> numB
-					 break;      
+					 break     
 				      }
 				    }
  
 			      if ( result == -100) {
 				      result = verA.size() <=> verB.size()
 			      }
-			      
-			 	 }
+ 
 
 			    echo "sorted versions: ${result}"					    
                         
