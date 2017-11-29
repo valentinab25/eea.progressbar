@@ -68,7 +68,7 @@ pipeline {
 				def check_version_is_new = "true"
 				def last_version = tags[0]["name"]
 
-			      if ( ! ( version !=~ /(\d+)\.(\d+)/ ) ) {
+			      if ( ! ( version ==~ /(\d+)\.(\d+)/ ) ) {
 			        error "Version ${version} does not respect format: \"number.number\", please change it"
 			      }
 				      
