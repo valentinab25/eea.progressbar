@@ -13,7 +13,7 @@ pipeline {
     }
 
   stages {
-  stage('Master branch release and tag') {
+    stage('Master branch') {
            when {
                 allOf {
                     environment name: 'CHANGE_ID', value: ''
@@ -21,15 +21,8 @@ pipeline {
                 }
             }
      steps {	  
-        parallel(
-
-          "Check files": {
-            node(label: 'docker-1.13') {
-	    }
-	  }
-		)
-     }
-  },
+          }
+      },
 		    
 		    
   stage('Pull request checks') {
