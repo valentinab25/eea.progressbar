@@ -68,8 +68,7 @@ pipeline {
 				def last_version = tags[0]["name"]
 			      echo "Version is ${version}, last version is ${last_version}"
 			      tags.each {                      
-	                               echo "${it['name']}"
-				      if ( "${it['name']}" == "${version}")  {
+	                 	      if ( it['name'].equalsIgnoreCase( version ) )  {
                                          check_version_is_new = "false"
                                         }
                               }
