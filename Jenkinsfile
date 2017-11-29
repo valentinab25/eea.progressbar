@@ -67,7 +67,12 @@ pipeline {
 				def tags = jsonSlurper.parseText(response)
 				def check_version_is_new = "true"
 				def last_version = tags[0]["name"]
-			      echo "Version is ${version}, last version is ${last_version}"
+
+			      if ( version !=~ ^(\d+)\.(\d+)$ ) {
+			        error "Version ${version} does not respect format: \"number.number\", please change it"
+			      }
+				      
+				      
 			      tags.each {                      
 	                 	      if ( it['name'].equalsIgnoreCase( version ) )  {
                                          check_version_is_new = "false"
@@ -78,30 +83,17 @@ pipeline {
 				     error "Pipeline aborted due to version already present in tags"
 				 }
 			      
-			 	def result = -100
-                                List verA = version.tokenize('.')
+			        List verA = version.tokenize('.')
 				List verB = last_version.tokenize('.')
-                                def commonIndices = verA.size()
-			        if (verB.size() < commonIndices) {
-				      commonIndices = verB.size()
-			         }
-
-				    for (int i = 0; i < commonIndices; ++i) {
+   			        for (int i = 0; i < 2; ++i) {
 				      def numA = verA[i].toInteger()
 				      def numB = verB[i].toInteger()
-				      echo "comparing ${numA} and ${numB}"
-
 				      if (numA != numB) {
 					result = numA <=> numB
-					  echo "result versions: ${result}"	     
-					 break     
+					break     
 				      }
 				    }
- 
-			      if ( result == -100) {
-				      result = verA.size() <=> verB.size()
-			      }
- 
+
 
 			    if ( result == -1 )	{                       
 				     error "Pipeline aborted due to version ${version} being smaller than last version ${last_version}"
