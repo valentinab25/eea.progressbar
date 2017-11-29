@@ -14,27 +14,6 @@ pipeline {
 
   stages {
 
-  stage('Master branch release and tag') {
-      when {
-                allOf {
-                    environment name: 'CHANGE_ID', value: ''
-                    branch 'master'
-                }
-            }
-     steps {
- parallel(
-          "Release": {
-            node(label: 'docker-1.13') {
-            }
-          },
-		
-          "Tag": {
-            node(label: 'docker-1.13') {       
-            }
-          }	
-          )
-      }
-}
 		    
 		    
   stage('Pull request checks') {
@@ -132,6 +111,29 @@ pipeline {
           )
       }
 }
+	  
+  stage('Master branch release and tag') {
+      when {
+                allOf {
+                    environment name: 'CHANGE_ID', value: ''
+                    branch 'master'
+                }
+            }
+     steps {
+ parallel(
+          "Release": {
+            node(label: 'docker-1.13') {
+            }
+          },
+		
+          "Tag": {
+            node(label: 'docker-1.13') {       
+            }
+          }	
+          )
+      }
+}
+	  
   }  
   
 }
