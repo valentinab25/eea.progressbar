@@ -58,7 +58,8 @@ pipeline {
                     withCredentials([string(credentialsId: 'GitHubTokentest', variable: 'GITHUB_TOKEN')]) {
                       script{
                                    checkout scm 
-			      def version = (readFile 'eea/progressbar/version.txt').trim()
+			      def version_temp = readFile 'eea/progressbar/version.txt'
+			      def version = version_temp.trim()
 			      
 			      def apiUrl = "https://api.github.com/repos/${env.GIT_ORG}/${env.GIT_NAME}/tags"
 				def response = sh(returnStdout: true, script: "curl -s -H \"Authorization: Token ${env.GITHUB_TOKEN}\" ${apiUrl}").trim()
