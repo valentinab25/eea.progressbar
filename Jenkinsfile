@@ -85,8 +85,7 @@ pipeline {
 				    }
 				  }[-1]
                                 }                 
-                          def lastversion=mostRecentVersion([ "${version}","${last_version}"])
-			      echo "${lastversion}"
+                          
                       }
                       }         
            
