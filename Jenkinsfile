@@ -94,6 +94,7 @@ pipeline {
 
 				      if (numA != numB) {
 					result = numA <=> numB
+					  echo "result versions: ${result}"	     
 					 break     
 				      }
 				    }
