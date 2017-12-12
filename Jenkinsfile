@@ -123,6 +123,10 @@ pipeline {
  parallel(
           "Release": {
             node(label: 'docker-1.13') {
+		 checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'eea.plonebuildout.core']], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/eea/eea.plonebuildout.core.git']]])
+   
+		    
+		    
             }
           },
 		
