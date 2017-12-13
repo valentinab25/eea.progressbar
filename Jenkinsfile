@@ -1,7 +1,5 @@
 #!groovy
 
-import groovy.json.JsonSlurper
-
 pipeline {
   agent any
 
@@ -21,7 +19,7 @@ pipeline {
                 not {
                     environment name: 'CHANGE_ID', value: ''
                 }
-		
+		 environment name: 'CHANGE_TARGET', value: 'master'
             }
      steps {
         parallel(
@@ -29,9 +27,7 @@ pipeline {
           "Check PR": {
             node(label: 'docker-1.13') {
                     	    
-		    if ( ${CHANGE_BRANCH} != "develop" &&  ${CHANGE_BRANCH} != "develop" ) {                       
-		             error "Pipeline aborted due to PR not made from develop or hotfix branch"
-		         }      
+
                     
 		try {
                   sh '''docker run -i --name="$BUILD_TAG-gitflow-pr" -e GIT_BRANCH="$BRANCH_NAME" -e GIT_CHANGE_ID="$CHANGE_ID" -e GIT_SRC="$GIT_URL" -e GIT_VERSIONFILE="$GIT_VERSIONFILE" -e GIT_HISTORYFILE="$GIT_HISTORYFILE" -e GIT_NAME="$GIT_NAME" gitflow'''
