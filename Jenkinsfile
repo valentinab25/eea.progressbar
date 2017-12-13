@@ -19,7 +19,6 @@ pipeline {
                 not {
                     environment name: 'CHANGE_ID', value: ''
                 }
-		 environment name: 'CHANGE_TARGET', value: 'master'
             }
      steps {
 	 
