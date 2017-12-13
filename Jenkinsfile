@@ -22,6 +22,8 @@ pipeline {
 		 environment name: 'CHANGE_TARGET', value: 'master'
             }
      steps {
+	 
+ parallel(
           "Check PR": {
             node(label: 'docker-1.13') {
                     	    
@@ -37,7 +39,13 @@ pipeline {
 		  
 		    
             }
-          }
+          },
+	  "Tag": {
+            node(label: 'docker-1.13') {       
+            }
+          }	
+          )
+	 
       }
 }
 	  
