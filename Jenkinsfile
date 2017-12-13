@@ -29,6 +29,7 @@ pipeline {
             node(label: 'docker-1.13') {
                     withCredentials([string(credentialsId: 'GitHubTokentest', variable: 'GITHUB_TOKEN')]) {
                       script{
+			sh '''env'''
                         def apiUrl = "https://api.github.com/repos/${env.GIT_ORG}/${env.GIT_NAME}/pulls/${env.CHANGE_ID}/files"
                         def response = sh(returnStdout: true, script: "curl -s -H \"Authorization: Token ${env.GITHUB_TOKEN}\" ${apiUrl}").trim()
                         def jsonSlurper = new JsonSlurper()
